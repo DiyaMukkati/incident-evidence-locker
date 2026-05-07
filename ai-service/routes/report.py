@@ -1,11 +1,12 @@
 from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
 import json
+import os
 
-recommend_bp = Blueprint("recommend", __name__)
+report_bp = Blueprint("report", __name__)
 
-@recommend_bp.route("/recommend", methods=["POST"])
-def recommend():
+@report_bp.route("/generate-report", methods=["POST"])
+def generate_report():
 
     data = request.get_json()
 
@@ -22,12 +23,21 @@ def recommend():
         }), 400
 
     try:
-       with open("./prompts/recommend_prompt.txt", "r") as f:
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        prompt_path = os.path.join(
+            BASE_DIR,
+            "prompts",
+            "report_prompt.txt"
+        )
+
+        with open(prompt_path, "r") as f:
             template = f.read()
 
-    except Exception:
+    except Exception as e:
         return jsonify({
-            "error": "Prompt file not found"
+            "error": "Prompt file not found",
+            "details": str(e)
         }), 500
 
     prompt = template.replace("{incident}", incident)
@@ -38,15 +48,14 @@ def recommend():
         parsed_response = json.loads(ai_response)
 
     except Exception:
-        parsed_response = [
-            {
-                "action_type": "Fallback",
-                "description": ai_response,
-                "priority": "Medium"
-            }
-        ]
+        parsed_response = {
+            "title": "Fallback Report",
+            "summary": ai_response,
+            "overview": "Parsing failed",
+            "recommendations": []
+        }
 
     return jsonify({
-        "recommendations": parsed_response,
+        "report": parsed_response,
         "status": "success"
     })

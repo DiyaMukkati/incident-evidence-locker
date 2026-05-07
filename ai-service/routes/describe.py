@@ -25,7 +25,7 @@ def describe():
         }), 400
 
     try:
-        with open("prompts/describe_prompt.txt", "r") as f:
+        with open("./prompts/describe_prompt.txt", "r") as f:
             template = f.read()
 
     except Exception as e:

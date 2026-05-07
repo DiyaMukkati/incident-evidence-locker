@@ -1,0 +1,13 @@
+Analyze the incident and generate a detailed report.
+
+Return ONLY valid JSON in this format:
+
+{
+  "title": "",
+  "summary": "",
+  "overview": "",
+  "recommendations": []
+}
+
+Incident:
+{incident}
