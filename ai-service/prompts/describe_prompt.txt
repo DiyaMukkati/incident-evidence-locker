@@ -1,11 +1,10 @@
-You are an AI assistant for incident analysis in an evidence management system.
+Analyze the following incident and return ONLY valid JSON.
 
-Analyze the incident description and provide a clear, structured response.
+{
+  "summary": "",
+  "key_issue": "",
+  "impact": ""
+}
 
-Return the output in JSON format with the following fields:
-- summary: a short 1–2 line summary of the incident
-- key_issue: the main problem identified
-- impact: possible consequences of the incident
-
-Input:
-{input}
+Incident:
+{incident}

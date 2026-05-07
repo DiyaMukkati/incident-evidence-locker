@@ -1,43 +1,40 @@
 import os
-import requests
+from groq import Groq
 from dotenv import load_dotenv
 
-# Load environment variables from .env
-load_dotenv()
+load_dotenv(dotenv_path=".env")
 
-# Get API key
-API_KEY = os.getenv("GROQ_API_KEY")
+api_key = os.getenv("GROQ_API_KEY")
+
+print("API KEY LOADED:", api_key)
+
+client = Groq(api_key=api_key)
 
 def call_groq(prompt):
-    url = "https://api.groq.com/openai/v1/chat/completions"
-
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "model": "llama-3.3-70b-versatile",
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        "temperature": 0.3
-    }
 
     try:
-        response = requests.post(url, headers=headers, json=data)
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3,
+            max_tokens=300
+        )
 
-        # Check if request succeeded
-        if response.status_code != 200:
-            print("Groq API Error:", response.text)
-            return '{"summary": "AI error", "key_issue": "API failed", "impact": "Unknown"}'
-
-        result = response.json()
-        return result["choices"][0]["message"]["content"]
+        return response.choices[0].message.content
 
     except Exception as e:
-        print("Exception:", e)
-        return '{"summary": "AI unavailable", "key_issue": "Exception", "impact": "Unknown"}'
+
+        print("GROQ ERROR:", str(e))
+
+        return '''
+        {
+            "summary": "AI unavailable",
+            "key_issue": "Exception",
+            "impact": "Unknown"
+        }
+        '''
