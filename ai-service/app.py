@@ -1,18 +1,11 @@
-from flask import Flask, jsonify
-from routes.describe import describe_bp   # 👈 ADD THIS
+from flask import Flask
+from routes.describe import describe_bp
+from routes.recommend import recommend_bp
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return "AI Service is running"
-
-@app.route("/health")
-def health():
-    return jsonify({"status": "ok"})
-
-# 👇 REGISTER YOUR ROUTE
 app.register_blueprint(describe_bp)
+app.register_blueprint(recommend_bp)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)

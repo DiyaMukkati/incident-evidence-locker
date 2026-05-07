@@ -1,11 +1,14 @@
-You are an AI assistant that suggests actions for handling incidents.
+Analyze the incident and suggest response actions.
 
-Based on the given incident, provide exactly 3 recommendations.
+Return ONLY valid JSON array in this format:
 
-Return the output as a JSON array. Each item must include:
-- action_type: (Preventive / Corrective / Immediate)
-- description: what should be done
-- priority: High / Medium / Low
+[
+  {
+    "action_type": "",
+    "description": "",
+    "priority": ""
+  }
+]
 
-Input:
-{input}
+Incident:
+{incident}
