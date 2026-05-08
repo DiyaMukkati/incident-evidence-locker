@@ -8,7 +8,7 @@ import os
 
 report_bp = Blueprint("report", __name__)
 
-@report_bp.route("/generate-report", methods=["POST"])
+@report_bp.route("/api/v1/generate-report", methods=["POST"])
 def generate_report():
 
     data = request.get_json()

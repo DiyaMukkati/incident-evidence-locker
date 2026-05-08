@@ -8,7 +8,7 @@ import json
 
 describe_bp = Blueprint("describe", __name__)
 
-@describe_bp.route("/describe", methods=["POST"])
+@describe_bp.route("/api/v1/describe", methods=["POST"])
 def describe():
 
     data = request.get_json()

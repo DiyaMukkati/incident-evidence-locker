@@ -13,6 +13,8 @@ This AI microservice is developed as part of the Incident Evidence Locker projec
 - Request logging and tracking
 - Security headers using Flask-Talisman
 - API rate limiting protection
+- Reusable request validation
+- Docker deployment support
 
 ---
 
@@ -24,6 +26,8 @@ This AI microservice is developed as part of the Incident Evidence Locker projec
 - Flask-Talisman
 - Flask-Limiter
 - Prompt Engineering
+- OWASP ZAP
+- Docker
 
 ---
 
@@ -45,8 +49,12 @@ ai-service/
 │
 ├── services/
 │   ├── groq_client.py
-│   └── logger_config.py
+│   ├── logger_config.py
+│   ├── validator.py
+│   └── error_handler.py
 │
-├── app.py
+├── Dockerfile
 ├── requirements.txt
-└── README.md
+├── .env.example
+├── README.md
+└── app.py

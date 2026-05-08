@@ -7,7 +7,7 @@ import json
 
 recommend_bp = Blueprint("recommend", __name__)
 
-@recommend_bp.route("/recommend", methods=["POST"])
+@recommend_bp.route("/api/v1/recommend", methods=["POST"])
 def recommend():
 
     data = request.get_json()
