@@ -2,22 +2,51 @@
 
 This AI microservice is developed as part of the Incident Evidence Locker project using Flask and Groq API. The service processes incident descriptions and generates structured AI-based responses for analysis, recommendations, and report generation.
 
-## Features
+---
+
+# Features
 
 - Incident description analysis
 - AI-generated recommendations
 - Detailed incident report generation
 - Health monitoring endpoint
-- Structured JSON responses
+- Request logging and tracking
+- Security headers using Flask-Talisman
+- API rate limiting protection
 
-## API Endpoints
+---
 
-### 1. Describe Incident
+# Technologies Used
 
-**POST** `/describe`
+- Python
+- Flask
+- Groq API
+- Flask-Talisman
+- Flask-Limiter
+- Prompt Engineering
 
-#### Request
-```json
-{
-  "incident": "A mobile phone was stolen near the bus stand at night."
-}
+---
+
+# Project Structure
+
+```bash
+ai-service/
+│
+├── prompts/
+│   ├── describe_prompt.txt
+│   ├── recommend_prompt.txt
+│   └── report_prompt.txt
+│
+├── routes/
+│   ├── describe.py
+│   ├── recommend.py
+│   ├── report.py
+│   └── health.py
+│
+├── services/
+│   ├── groq_client.py
+│   └── logger_config.py
+│
+├── app.py
+├── requirements.txt
+└── README.md
