@@ -14,6 +14,8 @@ This AI microservice is developed as part of the Incident Evidence Locker projec
 - Security headers using Flask-Talisman
 - API rate limiting protection
 - Reusable request validation
+- API versioning support
+- Swagger API documentation
 - Docker deployment support
 
 ---
@@ -25,6 +27,7 @@ This AI microservice is developed as part of the Incident Evidence Locker projec
 - Groq API
 - Flask-Talisman
 - Flask-Limiter
+- Flasgger
 - Prompt Engineering
 - OWASP ZAP
 - Docker
