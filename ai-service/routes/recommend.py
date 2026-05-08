@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
 from services.logger_config import logger
 from services.error_handler import bad_request, server_error
+from services.validator import validate_incident
 import json
 
 recommend_bp = Blueprint("recommend", __name__)
@@ -11,27 +12,23 @@ def recommend():
 
     data = request.get_json()
 
-    if not data or "incident" not in data:
-        return jsonify({
-            "error": "Incident input is required"
-        }), 400
+    validation_error = validate_incident(data)
+
+    if validation_error:
+        return bad_request(validation_error)
 
     incident = data["incident"].strip()
-    logger.info(f"Recommend endpoint called with incident: {incident}")
 
-    if not incident:
-        return jsonify({
-            "error": "Incident cannot be empty"
-        }), 400
+    logger.info(
+        f"Recommend endpoint called with incident: {incident}"
+    )
 
     try:
-       with open("./prompts/recommend_prompt.txt", "r") as f:
+        with open("./prompts/recommend_prompt.txt", "r") as f:
             template = f.read()
 
     except Exception:
-        return jsonify({
-            "error": "Prompt file not found"
-        }), 500
+        return server_error("Prompt file not found")
 
     prompt = template.replace("{incident}", incident)
 

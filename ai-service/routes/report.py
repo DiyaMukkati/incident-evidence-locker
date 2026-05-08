@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
 from services.logger_config import logger
 from services.error_handler import bad_request, server_error
+from services.validator import validate_incident
 import json
 import os
 
@@ -12,21 +13,22 @@ def generate_report():
 
     data = request.get_json()
 
-    if not data or "incident" not in data:
-        return jsonify({
-            "error": "Incident input is required"
-        }), 400
+    validation_error = validate_incident(data)
+
+    if validation_error:
+        return bad_request(validation_error)
 
     incident = data["incident"].strip()
-    logger.info(f"Report endpoint called with incident: {incident}")
 
-    if not incident:
-        return jsonify({
-            "error": "Incident cannot be empty"
-        }), 400
+    logger.info(
+        f"Report endpoint called with incident: {incident}"
+    )
 
     try:
-        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        BASE_DIR = os.path.dirname(
+            os.path.dirname(os.path.abspath(__file__))
+        )
 
         prompt_path = os.path.join(
             BASE_DIR,
@@ -37,11 +39,8 @@ def generate_report():
         with open(prompt_path, "r") as f:
             template = f.read()
 
-    except Exception as e:
-        return jsonify({
-            "error": "Prompt file not found",
-            "details": str(e)
-        }), 500
+    except Exception:
+        return server_error("Prompt file not found")
 
     prompt = template.replace("{incident}", incident)
 
@@ -54,7 +53,7 @@ def generate_report():
         parsed_response = {
             "title": "Fallback Report",
             "summary": ai_response,
-            "overview": "Parsing failed",
+            "overview": "Unable to parse AI response",
             "recommendations": []
         }
 
