@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
 from datetime import datetime
 from services.logger_config import logger
+from services.error_handler import bad_request, server_error
 import json
 
 describe_bp = Blueprint("describe", __name__)
@@ -14,17 +15,13 @@ def describe():
     print(data)
 
     if not data or "incident" not in data:
-        return jsonify({
-            "error": "Incident input is required"
-        }), 400
+       return bad_request("Incident input is required")
 
     incident = data["incident"].strip()
     logger.info(f"Describe endpoint called with incident: {incident}")
 
     if not incident:
-        return jsonify({
-            "error": "Incident cannot be empty"
-        }), 400
+        return bad_request("Incident cannot be empty")
 
     try:
         with open("./prompts/describe_prompt.txt", "r") as f:
