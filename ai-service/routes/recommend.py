@@ -4,11 +4,14 @@ from services.logger_config import logger
 from services.error_handler import bad_request, server_error
 from services.validator import validate_incident
 import json
+import time
 
 recommend_bp = Blueprint("recommend", __name__)
 
 @recommend_bp.route("/api/v1/recommend", methods=["POST"])
 def recommend():
+
+    start_time = time.time()
 
     data = request.get_json()
 
@@ -46,7 +49,14 @@ def recommend():
             }
         ]
 
+    response_time = round(time.time() - start_time, 3)
+
+    logger.info(
+        f"/recommend completed in {response_time} seconds"
+    )
+
     return jsonify({
-        "recommendations": parsed_response,
-        "status": "success"
+        "status": "success",
+        "version": "v1",
+        "recommendations": parsed_response
     })

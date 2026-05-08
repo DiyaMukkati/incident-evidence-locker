@@ -5,11 +5,14 @@ from services.logger_config import logger
 from services.error_handler import bad_request, server_error
 from services.validator import validate_incident
 import json
+import time
 
 describe_bp = Blueprint("describe", __name__)
 
 @describe_bp.route("/api/v1/describe", methods=["POST"])
 def describe():
+
+    start_time = time.time()
 
     data = request.get_json()
 
@@ -47,8 +50,15 @@ def describe():
             "impact": "Unknown"
         }
 
+    response_time = round(time.time() - start_time, 3)
+
+    logger.info(
+        f"/describe completed in {response_time} seconds"
+    )
+
     return jsonify({
+        "status": "success",
+        "version": "v1",
         "data": parsed_response,
-        "generated_at": datetime.utcnow().isoformat(),
-        "status": "success"
+        "generated_at": datetime.utcnow().isoformat()
     })

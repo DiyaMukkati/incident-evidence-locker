@@ -5,11 +5,14 @@ from services.error_handler import bad_request, server_error
 from services.validator import validate_incident
 import json
 import os
+import time
 
 report_bp = Blueprint("report", __name__)
 
 @report_bp.route("/api/v1/generate-report", methods=["POST"])
 def generate_report():
+
+    start_time = time.time()
 
     data = request.get_json()
 
@@ -57,7 +60,14 @@ def generate_report():
             "recommendations": []
         }
 
+    response_time = round(time.time() - start_time, 3)
+
+    logger.info(
+        f"/generate-report completed in {response_time} seconds"
+    )
+
     return jsonify({
-        "report": parsed_response,
-        "status": "success"
+        "status": "success",
+        "version": "v1",
+        "report": parsed_response
     })

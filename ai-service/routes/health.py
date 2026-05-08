@@ -9,5 +9,6 @@ def health():
     return jsonify({
         "status": "healthy",
         "service": "AI Incident Service",
+        "version": "v1",
         "timestamp": datetime.utcnow().isoformat()
     })
