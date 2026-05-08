@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
+from services.logger_config import logger
 import json
 
 recommend_bp = Blueprint("recommend", __name__)
@@ -15,6 +16,7 @@ def recommend():
         }), 400
 
     incident = data["incident"].strip()
+    logger.info(f"Recommend endpoint called with incident: {incident}")
 
     if not incident:
         return jsonify({

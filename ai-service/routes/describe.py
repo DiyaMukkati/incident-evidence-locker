@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from services.groq_client import call_groq
 from datetime import datetime
+from services.logger_config import logger
 import json
 
 describe_bp = Blueprint("describe", __name__)
@@ -18,6 +19,7 @@ def describe():
         }), 400
 
     incident = data["incident"].strip()
+    logger.info(f"Describe endpoint called with incident: {incident}")
 
     if not incident:
         return jsonify({
